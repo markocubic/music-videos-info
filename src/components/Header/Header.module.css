@@ -1,0 +1,13 @@
+.headerLogoTitle {
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+.headerIcon {
+    color: #E60022;
+    margin-top: 4px;
+}
+.headerTitle {
+    color: #E60022;
+    /* padding-bottom: 5px; */
+}

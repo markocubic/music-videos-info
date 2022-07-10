@@ -1,0 +1,27 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.topContent {
+  display: flex;
+  flex-direction: row;
+}
+
+.slideWrapper {
+  width: 900px;
+}
+
+.slideImage {
+  display: block;
+  width: 1000px;
+  height: 400px;
+}
+
+.topContentRight {
+  margin-left: 15px;
+  background-color: aqua;
+  width: 300px;
+}
