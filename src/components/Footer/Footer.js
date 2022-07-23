@@ -4,9 +4,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import RedditIcon from "@mui/icons-material/Reddit";
-import Link from "@mui/material/Link";
 import styles from "./Footer.module.css";
-import { style } from "@mui/system";
 
 export default function Footer() {
   return (

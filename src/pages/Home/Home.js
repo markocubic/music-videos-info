@@ -3,7 +3,7 @@ import { sliderImages } from "utils/data";
 import { Carousel } from "react-bootstrap";
 import styles from "./Home.module.css";
 
-function Home() {
+export default function Home() {
   const renderSlider = () => {
     return (
       <div className={styles.slideWrapper}>
@@ -34,5 +34,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;

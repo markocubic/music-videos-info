@@ -1,0 +1,83 @@
+.cardWrapper {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 20px;
+}
+.everySecondBackground {
+  background-color: rgb(251, 246, 246);
+}
+.image {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  height: 200px;
+  width: 200px;
+  cursor: pointer;
+}
+.cardContent {
+  padding-left: 10px
+}
+.title {
+  color: #136BB2;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.title:hover{
+  text-decoration: underline;
+}
+.artistName {
+  color: #136BB2;
+  cursor: pointer;
+}
+.artistName:hover {
+  text-decoration: underline;
+}
+.headerInfo {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  color: rgb(101, 101, 101);
+}
+.separator {
+  margin: 4px 5px 0px 5px;
+  height: 15px;
+  width: 1px;
+  background-color: rgb(187, 186, 186);
+}
+.genre {
+  margin-right: 4px;
+}
+.rating {
+  display: flex;
+  flex-direction: row;
+}
+.starIcon {
+  margin-right: 3px;
+  color: #E60022;
+}
+.ratingDate {
+  margin-bottom: 5px;
+  font-size: 15px;
+  color: rgb(101, 101, 101);
+}
+.credit {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+}
+.creditLink {
+  margin-left: 4px;
+  color: #136BB2;
+  cursor: pointer;
+}
+.creditLink:hover {
+  text-decoration: underline;
+}
+.numberOfVotes {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  color: rgb(101, 101, 101);
+}

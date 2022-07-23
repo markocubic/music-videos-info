@@ -1,0 +1,17 @@
+.selectOverride .MuiSelect-icon{
+  right: 0px !important;
+}
+.selectOverride .MuiOutlinedInput-notchedOutline{
+  border: none !important;
+}
+.selectOverride .MuiSelect-root {
+  border-radius: 10px;
+}
+.selectOverride .MuiOutlinedInput-input {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding-right: 27px !important;
+}
+.selectOverride .MuiMenuItem-gutters {
+  padding-left: 10px !important;
+}

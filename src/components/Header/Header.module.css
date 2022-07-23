@@ -1,13 +1,217 @@
-.headerLogoTitle {
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
+.root {
+  display: flex;
+  justify-content: center;
+  height: 70px;
 }
-.headerIcon {
-    color: #E60022;
-    margin-top: 4px;
+.logoSearchWrapper {
+  display: flex;
+  flex-direction: row;
+  padding-top: 20px;
+  width: 1035px; 
 }
-.headerTitle {
-    color: #E60022;
-    /* padding-bottom: 5px; */
+.logoWrapper {
+  display: flex;
+  flex-direction: row;
+  margin-right: 20px;
+  cursor: pointer;
+}
+.logoIcon {
+  color: #E60022;
+  margin-top: 4px;
+}
+.logoTitle {
+  color: #E60022;
+}
+.searchWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid rgb(187, 186, 186);
+  border-radius: 15px;
+  width: 100%;
+  height: 35px;
+}
+
+.filterArrowIcon {
+
+}
+.filterBorder {
+  margin-top: 3px;
+  height: 25px;
+  width: 1px;
+  background-color: rgb(167, 167, 167);
+}
+.searchInput {
+  /* background-color: aliceblue; */
+  height: 30px;
+  padding-top: 2px;
+  padding-left: 10px;
+  width: 100%;
+}
+.searchIcon {
+  margin: 5px 10px 0px 0px;
+  color: #000;
+  cursor: pointer;
+}
+.searchDropdownWrapper {
+  position: absolute;
+  z-index: 100;
+  top: 34px;
+  left: 0px;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid rgb(236, 236, 236);
+}
+.searchItemCard {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  height: 60px;
+  background-color: white;
+  cursor: pointer;
+}
+.searchItemCard:hover {
+  background-color: rgb(240, 239, 239);
+}
+.borderBottom {
+  border-bottom: 1px solid rgb(236, 236, 236);
+}
+.searchItemCardImageWrapper {
+  padding: 8px 15px 0px 5px;
+  width: 100px;
+  height: 50px;
+}
+.searchItemCardImage {
+  height: 100%;
+  width: 100%;
+  background-repeat: "no-repeat";
+  object-fit: "contain";
+}
+.searchItemCardText {
+}
+.searchItemCardTextTitle {
+  font-weight: 700;
+  margin-top: 5px;
+}
+.searchItemCardTextSubtitle {
+  margin-top: 0px;
+  padding-top: 0px;
+  font-size: 16px;
+  line-height: 16px;
+}
+.filterDropdownWrapper {
+  position: absolute;
+  z-index: 200;
+  top: 34px;
+  left: 0px;
+  width: 250px;
+  height: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid rgb(236, 236, 236);
+}
+.filterItemIcon {
+  margin-right: 10px;
+}
+.accountWrapper {
+  padding-top: 6px;
+  width: 295px; 
+}
+.accountContent {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  float: right;
+  margin-top: 14px;
+  margin-right: 8px;
+}
+.accountImage {
+  margin-right: 7px;
+}
+.accountButton {
+  margin-left: 15px;
+  font-weight: 700;
+}
+.accountButton:hover {
+  text-decoration: underline;
+  color: #E60022;
+}
+.modalWrapper {
+  display: flex;
+  align-items: center;  
+  flex-direction: column;
+  padding: 20px;
+  background-color: white;
+  height: 600px;
+  width: 450px;
+  border-radius: 20px;
+  outline: none;
+}
+.modalContent {
+  width: 280px;
+}
+.modalTitle {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 28px;
+  line-height: 30px;
+  font-weight: 500;
+}
+.modalForm {
+  margin-top: 20px;
+}
+.modalButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding-top: 8px;
+  height: 40px;
+  width: 280px;
+  border-radius: 50px;
+  background-color: #E60022;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+}
+.modalButton:hover {
+  background-color: #d70121;
+}
+.forgotPasswordText {
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.termsText {
+  margin-top: 20px;
+  margin-bottom: 14px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 15px;
+  color: #767676;
+}
+.boldText {
+  color: #111111;
+}
+.separatorLine {
+  margin: 0 auto;
+  height: 1px;
+  width: 140px;
+  background-color: #dedede;
+}
+.dontHaveAccount {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.modalIcon {
+  display: flex;
+  justify-content: center;
+}
+.accountLoggedWrapper {
+  margin-bottom: 10px;
 }

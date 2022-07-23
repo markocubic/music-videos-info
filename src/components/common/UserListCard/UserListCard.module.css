@@ -1,0 +1,20 @@
+.cardWrapper {
+  padding: 10px;
+  padding-bottom: 20px;
+}
+.everySecondBackground {
+  background-color: rgb(251, 246, 246);
+}
+.title {
+  color: #136BB2;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.title:hover{
+  text-decoration: underline;
+}
+.dates {
+  color: rgb(101, 101, 101);
+  font-size: 15px;
+}

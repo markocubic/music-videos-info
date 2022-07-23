@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 50px;
 }
 
 .topContent {
@@ -11,17 +10,20 @@
 }
 
 .slideWrapper {
-  width: 900px;
+  width: 1000px;
 }
 
 .slideImage {
   display: block;
   width: 1000px;
-  height: 400px;
+  height: 500px;
 }
 
 .topContentRight {
   margin-left: 15px;
-  background-color: aqua;
+  padding: 20px;
+  background-color: white;
+  border: 2px solid #E60022;
+  border-radius: 10px;
   width: 300px;
 }

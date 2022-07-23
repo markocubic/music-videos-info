@@ -1,15 +1,13 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import {ScreenRoutes} from  "defines/ScreenRoutes";
-import Home from "pages/Home";
-import SignIn from "pages/SignIn";
+import { Outlet } from "react-router-dom";
+import Header from "components/Header/Header";
+import Footer from "components/Footer/Footer";
 
 export default function AppRoutes() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path={ScreenRoutes.login.path} element={<SignIn />} />
-      </Routes>
-    </Router>
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+    </>
   );
 }

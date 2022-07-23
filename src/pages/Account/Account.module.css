@@ -1,0 +1,33 @@
+.root {
+  margin: 0 auto;
+  width: 600px;
+}
+.accountInfo {
+  display: flex;
+  flex-direction: row;
+  margin-top: 40px;
+}
+.username {
+  margin-left: 10px;
+  font-size: 24px;
+  color: #000;
+}
+.section {
+  margin-top: 40px;
+  padding: 20px;
+  width: 100%;
+  border: 1px solid rgb(187, 186, 186);
+  border-radius: 20px;
+}
+.title {
+  font-size: 22px;
+  font-weight: 500;
+}
+.ratingsListWrapper {
+
+}
+.button {
+  margin-top: 20px;
+  height: 35px;
+  width: 120px;
+}

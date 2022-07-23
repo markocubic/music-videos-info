@@ -1,170 +1,286 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+
 import styles from "./Header.module.css";
+import "./overridenStylesHeader.css";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import MusicVideoIcon from "@mui/icons-material/MusicVideo";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import Typography from "@mui/material/Typography";
+import SearchIcon from "@mui/icons-material/Search";
+import InputBase from "@mui/material/InputBase";
+import Select from "@mui/material/Select";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import Fade from "@mui/material/Fade";
+
+import { optionsDefault } from "utils/data";
+import AuthModal from "components/common/AuthModal/AuthModal";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
+  const isAuth = true;
+  const filterOptions = [
+    {
+      value: "All",
+      icon: <SearchIcon className={styles.filterItemIcon} />,
+    },
+    {
+      value: "Videos",
+      icon: <MusicVideoIcon className={styles.filterItemIcon} />,
+    },
+    {
+      value: "People",
+      icon: <PeopleAltIcon className={styles.filterItemIcon} />,
+    },
+  ];
+
+  const [options, setOptions] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [filter, setFilter] = useState(filterOptions[0].value);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSignIn, setIsSignIn] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClickAccount = (event) => {
+    setAnchorEl(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
+  const handleCloseAccount = () => {
+    setAnchorEl(null);
   };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+  const inputRef = useRef();
+  const searchListRef = useRef();
+
+  const onChangeInput = useCallback((value) => {
+    setSearchValue(value);
+    if (value) {
+      searchListRef.current.style.display = "block";
+      const filteredOptions = optionsDefault.filter((option) =>
+        option.includes(value)
+      );
+      setOptions(filteredOptions);
+      if (filteredOptions.length === 0) {
+        searchListRef.current.style.display = "none";
+      }
+    } else {
+      setOptions([]);
+      searchListRef.current.style.display = "none";
+    }
+  }, []);
+
+  useEffect(() => {
+    searchListRef.current.style.display = "none";
+    inputRef.current.addEventListener("click", (event) => {
+      event.stopPropagation();
+      onChangeInput(event.target.value);
+    });
+    document.addEventListener("click", () => {
+      searchListRef.current.style.display = "none";
+    });
+  }, [onChangeInput]);
+
+  const handleChangeFilter = (event) => {
+    setFilter(event.target.value);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const renderLogo = () => {
+    return (
+      <div
+        className={styles.logoWrapper}
+        onClick={() => {
+          navigate("../");
+        }}
+      >
+        <MusicNoteIcon
+          sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          className={styles.logoIcon}
+        />
+        <Typography
+          variant="h6"
+          noWrap
+          sx={{
+            mr: 2,
+            display: { xs: "none", md: "flex" },
+            fontFamily: "monospace",
+            fontWeight: 700,
+            letterSpacing: ".3rem",
+            textDecoration: "none",
+          }}
+          className={styles.logoTitle}
+        >
+          MusicVideos.com
+        </Typography>
+      </div>
+    );
+  };
+
+  const renderSearchItemCard = (option, index, optionsLength) => {
+    const isBorderBottom = !(optionsLength - 1 === index);
+    return (
+      <div
+        key={index}
+        className={`${styles.searchItemCard} ${
+          isBorderBottom && styles.borderBottom
+        }`}
+        onClick={() => {
+          setSearchValue(option);
+        }}
+      >
+        <div className={styles.searchItemCardImageWrapper}>
+          <img
+            className={styles.searchItemCardImage}
+            src={
+              "https://res.cloudinary.com/dh1kdvvlx/image/upload/v1657580808/maxresdefault_w7q8cp.jpg"
+            }
+            alt="..."
+          />
+        </div>
+        <div className={styles.searchItemCardText}>
+          <div className={styles.searchItemCardTextTitle}>{option}</div>
+          <div className={styles.searchItemCardTextSubtitle}>{option}</div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderSearch = () => {
+    return (
+      <div className={`searchWrapperOverride ${styles.searchWrapper}`}>
+        <Select
+          value={filter}
+          renderValue={(filter) => filter}
+          onChange={handleChangeFilter}
+        >
+          {filterOptions.map((item, index) => {
+            return (
+              <MenuItem value={item.value} key={index}>
+                {item.icon}
+                {item.value}
+              </MenuItem>
+            );
+          })}
+        </Select>
+        <div className={styles.filterBorder} />
+        <InputBase
+          className={styles.searchInput}
+          placeholder="Search"
+          onChange={(event) => onChangeInput(event.target.value)}
+          inputRef={inputRef}
+          value={searchValue}
+        />
+        <SearchIcon
+          className={styles.searchIcon}
+          onClick={() => console.log("Search")}
+        />
+        <div className={styles.searchDropdownWrapper} ref={searchListRef}>
+          {options.map((option, index) => {
+            return renderSearchItemCard(option, index, options.length);
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  const renderAccount = () => {
+    return (
+      <div className={styles.accountContent}>
+        {isAuth ? (
+          <div
+            className={`accountLoggedWrapper ${styles.accountLoggedWrapper}`}
+          >
+            <Button
+              id="fade-button"
+              aria-controls={open ? "fade-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClickAccount}
+            >
+              <AccountCircleIcon className={styles.accountImage} />
+              Username123
+              <ArrowDropDownIcon />
+            </Button>
+            <Menu
+              id="fade-menu"
+              MenuListProps={{
+                "aria-labelledby": "fade-button",
+              }}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleCloseAccount}
+              TransitionComponent={Fade}
+            >
+              <MenuItem
+                onClick={() => {
+                  handleCloseAccount();
+                  navigate("../account");
+                }}
+              >
+                Your activity
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleCloseAccount();
+                  navigate("../user-ratings");
+                }}
+              >
+                Your ratings
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleCloseAccount();
+                  navigate("../user-lists");
+                }}
+              >
+                Your lists
+              </MenuItem>
+              <MenuItem onClick={handleCloseAccount}>Sign out</MenuItem>
+            </Menu>
+          </div>
+        ) : (
+          <>
+            <div
+              className={styles.accountButton}
+              onClick={() => {
+                setIsSignIn(true);
+                setIsModalOpen(true);
+              }}
+            >
+              Sign in
+            </div>
+            <div
+              className={styles.accountButton}
+              onClick={() => {
+                setIsSignIn(false);
+                setIsModalOpen(true);
+              }}
+            >
+              Sign up
+            </div>
+          </>
+        )}
+      </div>
+    );
   };
 
   return (
-    <AppBar position="static" elevation={0} sx={{ bgcolor: "white" }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <div
-            className={styles.headerLogoTitle}
-            onClick={() => {
-              console.log("Logo title");
-            }}
-          >
-            <MusicNoteIcon
-              sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-              className={styles.headerIcon}
-            />
-            <Typography
-              variant="h6"
-              noWrap
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                textDecoration: "none",
-              }}
-              className={styles.headerTitle}
-            >
-              MusicVideos.com
-            </Typography>
-          </div>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+    <div className={styles.root}>
+      <div className={styles.logoSearchWrapper}>
+        {renderLogo()}
+        {renderSearch()}
+      </div>
+      <div className={styles.accountWrapper}>{renderAccount()}</div>
+      <AuthModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        isSignIn={isSignIn}
+        setIsSignIn={setIsSignIn}
+      />
+    </div>
   );
 }
