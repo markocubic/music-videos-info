@@ -1,0 +1,56 @@
+.modalWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 20px 35px 20px;
+  width: 450px;
+  border-radius: 5px;
+  background-color: white;
+  outline: none;
+}
+.starIconWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.starIconHeader {
+  font-size: 80px !important;
+  color: #136BB2;
+}
+.userRating {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 2px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+
+}
+.videoName {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.starsList {
+  display: flex;
+  flex-direction: row;
+}
+.starIcon {
+  margin-left: 3px;
+  margin-right: 3px;
+  font-size: 32px !important;
+  color: #136BB2;
+  cursor: pointer;
+}
+.removeRating {
+  margin-top: 20px;
+  color: #136BB2;
+  font-weight: 500;
+  cursor: pointer;
+}
+.removeRating:hover {
+  font-weight: 500;
+  text-decoration: underline;
+}

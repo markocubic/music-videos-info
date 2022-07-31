@@ -1,0 +1,161 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.contentWrapper {
+  margin-top: 20px;
+}
+.titleWrapper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+.title {
+  margin-right: 6px;
+  font-size: 24px;
+  font-weight: 500;
+}
+.titleBy {
+  margin-top: 8px;
+}
+.titleArtist {
+  margin-top: 4px;
+  margin-left: 6px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #136BB2;
+}
+.titleArtist:hover {
+  text-decoration: underline;
+}
+.videoAndMainInfo {
+  display: flex;
+  flex-direction: row;
+}
+.videoRatingsWrapper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+.mainInfoWrapper {
+  margin-left: 20px;
+}
+.ratingWrapper {
+}
+.ratingTitle {
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(52, 52, 52);
+}
+.ratingIconWrapper {
+  display: flex;
+  flex-direction: row;
+}
+.starIcon {
+  margin-top: 3px;
+  margin-right: 5px;
+  font-size: 38px !important;
+  color: #E60022;
+}
+.starIconBlue {
+  font-size: 38px !important;
+  color: #136BB2;
+}
+.ratingScoreAndNumberWrapper {
+  display: flex;
+  flex-direction: column;
+}
+.rating {
+  display: flex;
+  flex-direction: row;
+  line-height: 18px;
+}
+.rateScore {
+  margin-top: 1px;
+  margin-right: 2px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.fromTen {
+  margin-top: 2px;
+  margin-left: 2px;
+}
+.videoVotesNumber {
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.userRatingWrapper {
+  margin-left: 30px;
+}
+.userRatingFlexRowWrapper {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+}
+.userRatingFlexRowWrapper:hover {
+  background-color: aliceblue;
+  border-radius: 10px;
+}
+.starOutlineIcon {
+  margin-top: 3px;
+  font-size: 38px !important;
+  color: #136BB2;
+}
+.userRatingText {
+  margin: 3px 2px 0px 5px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.rateText {
+  margin-top: 8px;
+  margin-left: 5px;
+  color: #136BB2;
+  font-weight: 500;
+}
+.rateSlash {
+  margin-top: 4px;
+}
+.fromTenUser {
+  margin-top: 7px;
+  margin-left: 2px;
+}
+.infoWrapper {
+  padding: 10px;
+  border: 1px solid rgb(187, 186, 186);
+  border-radius: 10px;
+}
+.infoRow {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+.infoBold {
+  margin-right: 6px;
+  font-weight: 500;
+}
+.linkText {
+  color: #136BB2;
+  cursor: pointer;
+}
+.linkText:hover {
+  text-decoration: underline;
+}
+.label {
+  margin-right: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border: 1px solid #136BB2;
+  border-radius: 10px;
+  color: #136BB2;
+  cursor: pointer;
+}
+.label:hover {
+  background-color: aliceblue;
+}
+.creditsSection {
+  margin-top: 20px;
+}

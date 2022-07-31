@@ -1,0 +1,23 @@
+.infoRow {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+.listItemsRow {
+  display: flex;
+  flex-direction: row;
+}
+.infoBold {
+  margin-right: 6px;
+  font-weight: 500;
+}
+.linkText {
+  color: #136BB2;
+  cursor: pointer;
+}
+.linkText:hover {
+  text-decoration: underline;
+}
+.comma {
+  margin-right: 4px;
+}

@@ -1,0 +1,15 @@
+.searchWrapperOverride .MuiSelect-icon{
+  right: 0px !important;
+
+}
+.searchWrapperOverride .MuiOutlinedInput-notchedOutline{
+  border: none !important;
+}
+.searchWrapperOverride .MuiOutlinedInput-input {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding-right: 27px !important;
+}
+.searchWrapperOverride .MuiMenuItem-gutters {
+  padding-left: 10px !important;
+}

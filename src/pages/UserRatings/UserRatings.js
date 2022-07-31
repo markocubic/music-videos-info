@@ -8,12 +8,12 @@ import "./overridenStylesUserRatings.css";
 import {
   filterOptionsRatings,
   sortOptionsRatings,
-  userRatings,
+  musicVideosLoggedIn,
 } from "utils/data";
 import VideoCard from "components/common/VideoCard/VideoCard";
 
 export default function UserRatings() {
-  const [ratingsList, setRatingsList] = useState(userRatings);
+  const [ratingsList, setRatingsList] = useState(musicVideosLoggedIn);
   const [filter, setFilter] = useState(filterOptionsRatings[0].value);
   const [sort, setSort] = useState(sortOptionsRatings[0].value);
   const [isDownIconSelected, setIsDownIconSelected] = useState(true);

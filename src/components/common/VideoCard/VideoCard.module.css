@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: row;
   padding-bottom: 20px;
+  width: 100%;
 }
 .everySecondBackground {
   background-color: rgb(251, 246, 246);
@@ -11,15 +12,22 @@
   justify-content: center;
   overflow: hidden;
   height: 200px;
-  width: 200px;
+  max-width: 200px;
   cursor: pointer;
 }
 .cardContent {
   padding-left: 10px
 }
+.titleWrapper {
+  display: flex;
+  flex-direction: row;
+  font-size: 20px;
+}
+.titleNumber {
+  margin-right: 5px;
+}
 .title {
   color: #136BB2;
-  font-size: 20px;
   font-weight: 500;
   cursor: pointer;
 }
@@ -51,10 +59,17 @@
 .rating {
   display: flex;
   flex-direction: row;
+  width: fit-content;
+  cursor: pointer;
 }
 .starIcon {
   margin-right: 3px;
   color: #E60022;
+}
+.starIconBlue {
+  margin-right: 3px;
+  margin-left: 10px;
+  color: #136BB2;
 }
 .ratingDate {
   margin-bottom: 5px;
