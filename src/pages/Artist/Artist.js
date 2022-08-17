@@ -1,6 +1,7 @@
 import LinkRowArtist from "components/common/LinkRowArtist/LinkRowArtist";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import axiosInstance from "utils/axiosApi";
 import { artist, band, musicVideos } from "utils/data";
 
 import styles from "./Artist.module.css";
@@ -32,25 +33,26 @@ export default function Artist(props) {
     setVideographyList(list);
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    artist.forEach((item) => {
-      if (item.slug === slug) {
-        setArtistData(item);
-        findVidegraphy(item);
+  const geArtistData = useCallback(async () => {
+    setIsLoading(true);
+    await axiosInstance
+      .get(`/api/artist/${slug}/`) //stavit slug
+      .then((response) => {
+        console.log("geArtistData resp: ", response);
+        setArtistData(response.data);
+        findVidegraphy(response.data);
+      })
+      .catch((error) => {
+        console.log("Something went wrong geArtistData!", error);
+      })
+      .finally(() => {
         setIsLoading(false);
-      }
-    });
-    band.forEach((item) => {
-      if (item.slug === slug) {
-        setArtistData(item);
-        findVidegraphy(item);
-        setIsBand(true);
-        setIsLoading(false);
-      }
-    });
-    setIsLoading(false);
+      });
   }, [slug]);
+
+  useEffect(() => {
+    geArtistData();
+  }, [geArtistData]);
 
   const renderVideographyList = () => {
     return videographyList.map((video, index) => {

@@ -1,22 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { MenuItem, Select } from "@mui/material";
 import SouthIcon from "@mui/icons-material/South";
 import NorthIcon from "@mui/icons-material/North";
-
-import styles from "./UserRatings.module.css";
-import "./overridenStylesUserRatings.css";
+import axiosInstance from "utils/axiosApi";
 import {
   filterOptionsRatings,
   sortOptionsRatings,
-  musicVideosLoggedIn,
 } from "utils/data";
 import VideoCard from "components/common/VideoCard/VideoCard";
+import styles from "./UserRatings.module.css";
+import "./overridenStylesUserRatings.css";
+import { AuthContext } from "context/AuthProvider";
 
 export default function UserRatings() {
-  const [ratingsList, setRatingsList] = useState(musicVideosLoggedIn);
+  const { user } = useContext(AuthContext);
+
+  const [ratingsList, setRatingsList] = useState();
   const [filter, setFilter] = useState(filterOptionsRatings[0].value);
   const [sort, setSort] = useState(sortOptionsRatings[0].value);
   const [isDownIconSelected, setIsDownIconSelected] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getRatings = useCallback(async () => {
+    await axiosInstance
+      .get(`/api/rating/${user.user_id}/`)
+      .then((response) => {
+        console.log("rating resp: ", response);
+        setRatingsList(response.data);
+      })
+      .catch((error) => {
+        console.log("Something went wrong rating!", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [user]);
+
+  useEffect(() => {
+    getRatings();
+  }, [getRatings]);
+
   const handleChangeFilter = (event) => {
     setFilter(event.target.value);
   };
@@ -94,14 +117,17 @@ export default function UserRatings() {
     );
   };
 
+  if (isLoading) {
+    return;
+  }
   return (
     <div className={styles.root}>
       <div className={styles.contentWrapper}>
         <div className={styles.title}>Your Ratings</div>
-        <div>Number of videos: 000</div>
+        <div>Number of videos: {ratingsList && ratingsList.length}</div>
         {renderFilterAndSort()}
         <div className={styles.ratingsList}>
-          {ratingsList.length > 0 ? (
+          {ratingsList?.length > 0 ? (
             renderList()
           ) : (
             <div>You don't have any ratings yet.</div>

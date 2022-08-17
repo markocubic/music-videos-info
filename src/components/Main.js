@@ -3,7 +3,7 @@ import Header from "components/Header/Header";
 import Footer from "components/Footer/Footer";
 import Root from "components/Root/Root";
 
-export default function AppRoutes() {
+export default function Main() {
   return (
     <>
       <Header />

@@ -1,46 +1,69 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { musicVideos, musicVideosLoggedIn } from "utils/data";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import styles from "./MusicVideo.module.css";
 import RateModal from "components/common/RateModal/RateModal";
 import LinkRowArtist from "components/common/LinkRowArtist/LinkRowArtist";
+import { AuthContext } from "context/AuthProvider";
+import axiosInstance from "utils/axiosApi";
 
-export default function MusicVideo(props) {
+export default function MusicVideo() {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  const isAuth = true;
+  const { user, setIsSignInOpen } = useContext(AuthContext);
+
   const [videoData, setVideoData] = useState();
-  const [ratingData, setRatingData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRating, setUserRating] = useState();
+  const [userRatingData, setUserRatingData] = useState();
+
+  const getVideoData = useCallback(async () => {
+    await axiosInstance
+      .get(`/api/music-video/${slug}/`) //stavit slug
+      .then((response) => {
+        console.log("getVideoData resp: ", response);
+        setVideoData(response.data);
+      })
+      .catch((error) => {
+        console.log("Something went wrong getVideoData!", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [slug]);
+
+  const getVideoAndRatingData = useCallback(async () => {
+    await axiosInstance
+      .get(`/api/rating/${user.user_id}/1/`) //stavit slug
+      .then((response) => {
+        console.log("getVideoAndRatingData resp: ", response);
+        if (response.data.rating === null) {
+          getVideoData();
+        }
+        setUserRatingData(response.data);
+        setUserRating(response.data.rating);
+        setVideoData(response.data.musicVideo);
+      })
+      .catch((error) => {
+        console.log("Something went wrong getVideoAndRatingData!", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [user, getVideoData]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (isAuth) {
-      musicVideosLoggedIn.forEach((video) => {
-        if (video.slug === slug) {
-          if (video.userRating) {
-            setRatingData(video);
-            setUserRating(video.userRating);
-          }
-          setVideoData(video);
-          setIsLoading(false);
-        }
-      });
+    if (user) {
+      getVideoAndRatingData();
     } else {
-      musicVideos.forEach((video) => {
-        if (video.slug === slug) {
-          setVideoData(video);
-          setIsLoading(false);
-        }
-      });
+      getVideoData();
     }
     setIsLoading(false);
-  }, [isAuth, slug]);
+  }, [user, slug, getVideoAndRatingData, getVideoData, userRating]);
 
   const renderVideoRatings = () => {
     return (
@@ -51,11 +74,11 @@ export default function MusicVideo(props) {
             <StarIcon className={styles.starIcon} />
             <div className={styles.ratingScoreAndNumberWrapper}>
               <div className={styles.rating}>
-                <div className={styles.rateScore}>{videoData.rateScore}</div>/
+                <div className={styles.rateScore}>{videoData.rate_score}</div>/
                 <div className={styles.fromTen}>10</div>
               </div>
               <div className={styles.videoVotesNumber}>
-                {videoData.votesNumber}
+                {videoData.votes_number}
               </div>
             </div>
           </div>
@@ -63,7 +86,11 @@ export default function MusicVideo(props) {
         <div
           className={styles.userRatingWrapper}
           onClick={() => {
-            setIsModalOpen(true);
+            if (user) {
+              setIsModalOpen(true);
+            } else {
+              setIsSignInOpen(true);
+            }
           }}
         >
           <div className={styles.ratingTitle}>YOUR RATING</div>
@@ -90,21 +117,21 @@ export default function MusicVideo(props) {
   const renderInfo = () => {
     return (
       <div className={styles.infoWrapper}>
-        <LinkRowArtist title="Artist:" item={videoData.artist} />
-        <LinkRowArtist title="Released:" item={videoData.releaseYear} noLink />
+        {/* <LinkRowArtist title="Artist:" item={videoData.artist} /> */}
+        <LinkRowArtist title="Released:" item={videoData.release_year} noLink />
         <div className={styles.infoRow}>
           <div className={styles.infoBold}>Album:</div>
           <div className={styles.linkText}>{videoData.album}</div>
         </div>
         <div className={styles.infoRow}>
           <div className={styles.infoBold}>Genres:</div>
-          {videoData.genres.map((genre, index) => {
+          {/* {videoData.genres.map((genre, index) => {
             return (
               <div key={index} className={styles.label}>
                 {genre}
               </div>
             );
-          })}
+          })} */}
         </div>
       </div>
     );
@@ -113,10 +140,10 @@ export default function MusicVideo(props) {
   const renderCredits = () => {
     return (
       <div className={styles.creditsSection}>
-        <LinkRowArtist title="Director:" item={videoData.credits.director} />
-        <LinkRowArtist title="Stars:" item={videoData.credits.cast} />
-        {videoData.credits.writers && (
-          <LinkRowArtist title="Writers:" item={videoData.credits.writers} />
+        <LinkRowArtist title="Director:" item={videoData?.credits?.director} />
+        <LinkRowArtist title="Stars:" item={videoData?.credits?.cast} />
+        {videoData?.credits?.writers && (
+          <LinkRowArtist title="Writers:" item={videoData?.credits?.writers} />
         )}
       </div>
     );
@@ -137,7 +164,7 @@ export default function MusicVideo(props) {
                 navigate(`../artist/${videoData.artist.slug}`);
               }}
             >
-              {videoData.artist.name}
+              {/* {videoData.artist.name} */}
             </div>
           </div>
           <div className={styles.videoAndMainInfo}>
@@ -145,7 +172,7 @@ export default function MusicVideo(props) {
               <iframe
                 width="608"
                 height="342"
-                src={videoData.ytEmbedded}
+                src={videoData.yt_embedded}
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -157,15 +184,15 @@ export default function MusicVideo(props) {
               {renderInfo()}
             </div>
           </div>
-          {renderCredits()}
+          {/* {renderCredits()} */}
         </div>
-
         <RateModal
-          item={videoData}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           userRating={userRating}
           setUserRating={setUserRating}
+          ratingData={userRatingData}
+          videoData={videoData}
         />
       </div>
     );

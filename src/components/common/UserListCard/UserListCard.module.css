@@ -11,6 +11,7 @@
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
+  text-transform: capitalize;
 }
 .title:hover{
   text-decoration: underline;

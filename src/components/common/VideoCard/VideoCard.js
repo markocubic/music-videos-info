@@ -5,14 +5,17 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./VideoCard.module.css";
 import RateModal from "../RateModal/RateModal";
+import Moment from "moment";
 
 export default function VideoCard(props) {
   const { item, index, showNumber } = props;
 
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userRating, setUserRating] = useState(item.userRating);
+  const [userRating, setUserRating] = useState(item.rating);
 
+  const musicVideoData = item.musicVideo;
+ 
   return (
     <div
       className={`${styles.cardWrapper} ${
@@ -20,7 +23,7 @@ export default function VideoCard(props) {
       }`}
     >
       <div className={styles.image}>
-        <img alt="..." src={item.image} height="200" />
+        <img alt="..." src={musicVideoData.image} height="200" />
       </div>
       <div className={styles.cardContent}>
         <div className={styles.titleWrapper}>
@@ -28,29 +31,30 @@ export default function VideoCard(props) {
           <div
             className={styles.title}
             onClick={() => {
-              navigate(`../music-video/${item.slug}`);
+              navigate(`../music-video/${musicVideoData.slug}`);
             }}
-          >{`${item.title} (${item.releaseYear})`}</div>
+          >{`${musicVideoData.title} (${Moment(
+            musicVideoData.release_year
+          ).format("YYYY")})`}</div>
         </div>
-
         <div
           className={styles.artistName}
           onClick={() => {
-            navigate(`../artist/${item.artist.slug}`);
+            navigate(`../artist/${musicVideoData.artist.slug}`);
           }}
         >
-          {item.artist.name}
+          {musicVideoData.artist.name}
         </div>
         <div className={styles.headerInfo}>
-          <div>{item.duration}</div>
+          <div>{musicVideoData.duration}</div>
           <div className={styles.separator} />
-          {item.genres.map((genre, index) => {
+          {/* {item.genres.map((genre, index) => {
             return (
               <div key={index} className={styles.genre}>{`${genre}${
                 item.genres.length - 1 !== index ? "," : " "
               }`}</div>
             );
-          })}
+          })} */}
         </div>
         <div
           className={styles.rating}
@@ -59,7 +63,7 @@ export default function VideoCard(props) {
           }}
         >
           <StarIcon className={styles.starIcon} />
-          <div>{item.rateScore}</div>
+          <div>{musicVideoData.rate_score}</div>
           {userRating && (
             <>
               <StarIcon className={styles.starIconBlue} />
@@ -76,12 +80,12 @@ export default function VideoCard(props) {
               navigate(`../artist/${item.credits.director.slug}`);
             }}
           >
-            {item.credits.director.name}
+            {/* {item.credits.director.name} */}
           </div>
         </div>
         <div className={styles.credit}>
           Stars:
-          {item.credits.cast.map((cast, index) => {
+          {/* {item.credits.cast.map((cast, index) => {
             return (
               <div
                 key={index}
@@ -95,16 +99,19 @@ export default function VideoCard(props) {
                 }`}
               </div>
             );
-          })}
+          })} */}
         </div>
-        <div className={styles.numberOfVotes}>Votes: {item.votesNumber}</div>
+        <div className={styles.numberOfVotes}>
+          Votes: {musicVideoData.votes_number}
+        </div>
       </div>
       <RateModal
-        item={item}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         userRating={userRating}
         setUserRating={setUserRating}
+        ratingData={item}
+        videoData={item.musicVideo}
       />
     </div>
   );

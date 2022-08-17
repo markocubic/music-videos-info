@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -12,13 +12,11 @@ import { useNavigate } from "react-router-dom";
 import Search from "components/search/Search";
 import styles from "./Header.module.css";
 import "./overridenStylesHeader.css";
+import { AuthContext } from "context/AuthProvider";
 
 export default function Header() {
   const navigate = useNavigate();
-
-  const isAuth = true;
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user, logOutUser, isSignInOpen, setIsSignInOpen } = useContext(AuthContext);
   const [isSignIn, setIsSignIn] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -26,7 +24,7 @@ export default function Header() {
   const handleClickAccount = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleCloseAccount = () => {
+  const handleCloseAccountDropdown = () => {
     setAnchorEl(null);
   };
 
@@ -61,10 +59,16 @@ export default function Header() {
     );
   };
 
+  const logOut = () => {
+    handleCloseAccountDropdown();
+    logOutUser();
+    navigate("../");
+  };
+
   const renderAccount = () => {
     return (
       <div className={styles.accountContent}>
-        {isAuth ? (
+        {user ? (
           <div
             className={`accountLoggedWrapper ${styles.accountLoggedWrapper}`}
           >
@@ -76,7 +80,7 @@ export default function Header() {
               onClick={handleClickAccount}
             >
               <AccountCircleIcon className={styles.accountImage} />
-              Username123
+              {user.username}
               <ArrowDropDownIcon />
             </Button>
             <Menu
@@ -86,12 +90,12 @@ export default function Header() {
               }}
               anchorEl={anchorEl}
               open={open}
-              onClose={handleCloseAccount}
+              onClose={handleCloseAccountDropdown}
               TransitionComponent={Fade}
             >
               <MenuItem
                 onClick={() => {
-                  handleCloseAccount();
+                  handleCloseAccountDropdown();
                   navigate("../account");
                 }}
               >
@@ -99,7 +103,7 @@ export default function Header() {
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  handleCloseAccount();
+                  handleCloseAccountDropdown();
                   navigate("../user-ratings");
                 }}
               >
@@ -107,13 +111,13 @@ export default function Header() {
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  handleCloseAccount();
+                  handleCloseAccountDropdown();
                   navigate("../user-lists");
                 }}
               >
                 Your lists
               </MenuItem>
-              <MenuItem onClick={handleCloseAccount}>Sign out</MenuItem>
+              <MenuItem onClick={() => logOut()}>Sign out</MenuItem>
             </Menu>
           </div>
         ) : (
@@ -122,7 +126,7 @@ export default function Header() {
               className={styles.accountButton}
               onClick={() => {
                 setIsSignIn(true);
-                setIsModalOpen(true);
+                setIsSignInOpen(true);
               }}
             >
               Sign in
@@ -131,7 +135,7 @@ export default function Header() {
               className={styles.accountButton}
               onClick={() => {
                 setIsSignIn(false);
-                setIsModalOpen(true);
+                setIsSignInOpen(true);
               }}
             >
               Sign up
@@ -150,8 +154,7 @@ export default function Header() {
       </div>
       <div className={styles.accountWrapper}>{renderAccount()}</div>
       <AuthModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isSignInOpen}
         isSignIn={isSignIn}
         setIsSignIn={setIsSignIn}
       />

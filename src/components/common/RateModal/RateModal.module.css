@@ -36,6 +36,7 @@
 .starsList {
   display: flex;
   flex-direction: row;
+  margin-bottom: 20px;
 }
 .starIcon {
   margin-left: 3px;
@@ -53,4 +54,19 @@
 .removeRating:hover {
   font-weight: 500;
   text-decoration: underline;
+}
+.confirmRatingButton {
+  display: flex;
+  justify-content: center;
+  padding: 0px 15px 0px 15px;
+  border: 1px solid #136BB2;
+  font-size: 17px;
+  width: 100px;
+  color: #136BB2;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.confirmRatingButton:hover {
+  background-color: #136BB2;
+  color: white;
 }

@@ -1,58 +1,61 @@
 import VideoCard from "components/common/VideoCard/VideoCard";
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
 import { userLists } from "utils/data";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import OptionsButton from "components/common/OptionsButton/OptionsButton";
-import SearchIcon from "@mui/icons-material/Search";
-import InputBase from "@mui/material/InputBase";
-import { optionsDefault } from "utils/data";
 import styles from "./UserList.module.css";
 import Search from "components/search/Search";
+import TextFieldWrapper from "components/common/TextFieldWrapper/TextFieldWrapper";
+import axiosInstance from "utils/axiosApi";
 
 export default function UserList(props) {
   const { slug } = useParams();
-  const accName = "AccountName";
 
+  const accName = "AccountName";
+  const location = useLocation();
   const [listData, setListData] = useState();
   const [listDataList, setListDataList] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [isEdit, setIsEdit] = useState(false);
-  const [options, setOptions] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
+  const [isEdit, setIsEdit] = useState(location.state ? true : false);
+  const [listTitle, setListTitle] = useState();
 
-  const inputRef = useRef();
-  const searchListRef = useRef();
+  const getList = useCallback(async () => {
+    await axiosInstance
+      .get(`/api/video-list/${slug}/`)
+      .then((response) => {
+        console.log("list resp: ", response);
+        setListData(response.data);
+        setListTitle(response.data.title);
+        setListDataList(response.data.musicVideos);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log("Something went wrong list!", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
-    userLists.forEach((list) => {
-      if (list.slug === slug) {
-        setListData(list);
-        setListDataList(list.list);
-        setIsLoading(false);
-      }
-    });
-    setIsLoading(false);
+    getList();
+    // userLists.forEach((list) => {
+    //   if (list.slug === slug) {
+    //     setListData(list);
+    //     setListTitle(list.name);
+    //     setListDataList(list.list);
+    //     setIsLoading(false);
+    //   }
+    // });
+    // setIsLoading(false);
   }, [setIsLoading, slug, isLoading]);
 
-  const onChangeInput = useCallback((value) => {
-    setSearchValue(value);
-    if (value) {
-      searchListRef.current.style.display = "block";
-      const filteredOptions = optionsDefault.filter((option) =>
-        option.includes(value)
-      );
-      setOptions(filteredOptions);
-      if (filteredOptions.length === 0) {
-        searchListRef.current.style.display = "none";
-      }
-    } else {
-      setOptions([]);
-      searchListRef.current.style.display = "none";
-    }
-  }, []);
+  const submitEdit = () => {
+    setIsEdit(false);
+  };
 
   const handleDelete = (id) => {
     const updatedList = listDataList.filter((item) => item.id !== id);
@@ -76,40 +79,36 @@ export default function UserList(props) {
 
     setListDataList([...tempList]);
   };
-
-  const renderSearchItemCard = (option, index, optionsLength) => {
-    const isBorderBottom = !(optionsLength - 1 === index);
-    return (
-      <div
-        key={index}
-        className={`${styles.searchItemCard} ${
-          isBorderBottom && styles.borderBottom
-        }`}
-        onClick={() => {
-          setSearchValue(option);
-        }}
-      >
-        <div className={styles.searchItemCardImageWrapper}>
-          <img
-            className={styles.searchItemCardImage}
-            src={
-              "https://res.cloudinary.com/dh1kdvvlx/image/upload/v1657580808/maxresdefault_w7q8cp.jpg"
-            }
-            alt="..."
+  console.log("listTitle: ", listTitle);
+  const renderListName = () => {
+    if (isEdit) {
+      return (
+        <div className={styles.textField}>
+          <TextFieldWrapper
+            id="name"
+            name="name"
+            label="List Name"
+            value={listTitle}
+            onChange={(value) => setListTitle(value.target.value)}
+            // error={formik.touched.username && Boolean(formik.errors.username)}
+            // helperText={formik.touched.username && formik.errors.username}
           />
         </div>
-        <div className={styles.searchItemCardText}>
-          <div className={styles.searchItemCardTextTitle}>{option}</div>
-          <div className={styles.searchItemCardTextSubtitle}>{option}</div>
+      );
+    } else {
+      return (
+        <div className={styles.titleName}>
+          {`${accName}'s ${listData.name}`}
         </div>
-      </div>
-    );
+      );
+    }
   };
 
   const renderList = () => {
     return (
       <div>
         {listDataList.map((item, index) => {
+          console.log('list item: ', item)
           return (
             <div key={item.slug} className={styles.videoCardWrapper}>
               <VideoCard item={item} index={index} showNumber />
@@ -161,10 +160,17 @@ export default function UserList(props) {
           <div className={styles.contentWrapper}>
             {isEdit && (
               <div className={styles.editHeader}>
-                Editing
                 <div
                   onClick={() => {
                     setIsEdit(false);
+                  }}
+                  className={styles.editCancelButton}
+                >
+                  Cancel
+                </div>
+                <div
+                  onClick={() => {
+                    submitEdit();
                   }}
                   className={styles.editDoneButton}
                 >
@@ -172,15 +178,15 @@ export default function UserList(props) {
                 </div>
               </div>
             )}
-            <div className={styles.title}>
-              <div>
-                {accName}'s {listData.name}
-              </div>
-              <OptionsButton
-                onEdit={() => {
-                  setIsEdit(true);
-                }}
-              />
+            <div className={styles.titleWrapper}>
+              {renderListName()}
+              {!isEdit && (
+                <OptionsButton
+                  onEdit={() => {
+                    setIsEdit(true);
+                  }}
+                />
+              )}
             </div>
             <div className={styles.editSearchAndFinish}></div>
             <div className={styles.listInfo}>
