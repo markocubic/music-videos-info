@@ -4,7 +4,6 @@ import { AuthContext } from "context/AuthProvider";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "utils/axiosApi";
-import { userLists } from "utils/data";
 import styles from "./UserLists.module.css";
 
 export default function UserLists() {
@@ -33,8 +32,6 @@ export default function UserLists() {
     getLists();
   }, [getLists]);
 
-  console.log('list: ', list);
-
   if (isLoading) {
     return;
   }
@@ -46,14 +43,21 @@ export default function UserLists() {
           <ButtonRed
             className={styles.button}
             onClick={() => {
-              navigate('../list-create', { state: { isNew: true } });
+              navigate("../list-create", { state: { isNew: true } });
             }}
           >
             Create new
           </ButtonRed>
         </div>
         {list.map((item, index) => {
-          return <UserListCard key={index} item={item} index={index} />;
+          return (
+            <UserListCard
+              key={index}
+              item={item}
+              index={index}
+              getLists={() => getLists}
+            />
+          );
         })}
       </div>
     </div>

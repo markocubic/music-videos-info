@@ -1,14 +1,27 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./UserListCard.module.css";
 import "./overridenStylesListCard.css";
 import OptionsButton from "../OptionsButton/OptionsButton";
-import { AuthContext } from "context/AuthProvider";
+import axiosInstance from "utils/axiosApi";
+import Moment from "moment";
 
 export default function UserListCard(props) {
   const navigate = useNavigate();
-  const { item, index } = props;
-  const { user } = useContext(AuthContext);
+  const { item, index, getLists } = props;
+
+  const deleteList = async () => {
+    await axiosInstance
+      .delete(`/api/video-lists/${item.slug}/`)
+      .then((response) => {
+        console.log("deleteList resp: ", response);
+        getLists();
+      })
+      .catch((error) => {
+        console.log("Something went wrong deleteList!", error);
+      })
+  };
+
   return (
     <div
       className={`${styles.cardWrapper} ${
@@ -17,18 +30,21 @@ export default function UserListCard(props) {
     >
       <div
         className={styles.title}
-        onClick={() => navigate(`../list/${item.id}/`)}
+        onClick={() => navigate(`../list/${item.slug}/`)}
       >
-        {user.username}'s {item.title}
+        {item.title}
       </div>
       <div>{item.musicVideos.length} items</div>
       <div className={styles.dates}>
-        Modified: {item.lastModified} | Created: {item.dateCreated}
+        Modified: {Moment(item.date_updated).format("YYYY-MM-DD")} | Created: {Moment(item.date_created).format("YYYY-MM-DD")}
       </div>
       <div className={styles.optionsIcon}>
         <OptionsButton
           onEdit={() => {
             navigate(`../list/${item.slug}`, { state: true });
+          }}
+          onDelete={() => {
+            deleteList();
           }}
         />
       </div>

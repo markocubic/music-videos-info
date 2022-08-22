@@ -30,6 +30,18 @@ export default function Account() {
         <div className={styles.username}>{user.username}</div>
       </div>
       <div className={styles.section}>
+        <div className={styles.title}>You are a staff member</div>
+        Add a video to MusicVideos.com
+        <ButtonRed
+          className={styles.button}
+          onClick={() => {
+            navigate("../music-video-create");
+          }}
+        >
+          Add a video
+        </ButtonRed>
+      </div>
+      <div className={styles.section}>
         <div className={styles.title}>Your Ratings</div>
         <div>Most recently rated</div>
         <div className={styles.ratingsListWrapper}></div>

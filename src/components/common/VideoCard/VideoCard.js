@@ -8,14 +8,14 @@ import RateModal from "../RateModal/RateModal";
 import Moment from "moment";
 
 export default function VideoCard(props) {
-  const { item, index, showNumber } = props;
+  const { item, index, fromList } = props;
 
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRating, setUserRating] = useState(item.rating);
 
-  const musicVideoData = item.musicVideo;
- 
+  const musicVideoData = fromList ? item : item.musicVideo;
+
   return (
     <div
       className={`${styles.cardWrapper} ${
@@ -27,7 +27,7 @@ export default function VideoCard(props) {
       </div>
       <div className={styles.cardContent}>
         <div className={styles.titleWrapper}>
-          {showNumber && <div className={styles.titleNumber}>{index + 1}.</div>}
+          {fromList && <div className={styles.titleNumber}>{index + 1}.</div>}
           <div
             className={styles.title}
             onClick={() => {
@@ -56,21 +56,23 @@ export default function VideoCard(props) {
             );
           })} */}
         </div>
-        <div
-          className={styles.rating}
-          onClick={() => {
-            setIsModalOpen(true);
-          }}
-        >
-          <StarIcon className={styles.starIcon} />
-          <div>{musicVideoData.rate_score}</div>
-          {userRating && (
-            <>
-              <StarIcon className={styles.starIconBlue} />
-              <div>{userRating}</div>
-            </>
-          )}
-        </div>
+        {!fromList && (
+          <div
+            className={styles.rating}
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
+          >
+            <StarIcon className={styles.starIcon} />
+            <div>{musicVideoData.rate_score}</div>
+            {userRating && (
+              <>
+                <StarIcon className={styles.starIconBlue} />
+                <div>{userRating}</div>
+              </>
+            )}
+          </div>
+        )}
         <div className={styles.ratingDate}>Rated on 12. 10. 2022.</div>
         <div className={styles.credit}>
           Director:
@@ -105,14 +107,16 @@ export default function VideoCard(props) {
           Votes: {musicVideoData.votes_number}
         </div>
       </div>
-      <RateModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        userRating={userRating}
-        setUserRating={setUserRating}
-        ratingData={item}
-        videoData={item.musicVideo}
-      />
+      {!fromList && (
+        <RateModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          userRating={userRating}
+          setUserRating={setUserRating}
+          ratingData={item}
+          videoData={item.musicVideo}
+        />
+      )}
     </div>
   );
 }

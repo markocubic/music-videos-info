@@ -15,44 +15,38 @@ export default function Artist(props) {
   const [isBand, setIsBand] = useState(false);
   const [videographyList, setVideographyList] = useState([]);
 
-  const findVidegraphy = (item) => {
-    let list = [];
-    musicVideos.forEach((video) => {
-      if (video.artist === item) {
-        list.push(video);
-      } else if (video.credits.director === item) {
-        list.push(video);
-      } else {
-        video.credits.cast.forEach((member) => {
-          if (member === item) {
-            list.push(video);
-          }
-        });
-      }
-    });
-    setVideographyList(list);
-  };
-
-  const geArtistData = useCallback(async () => {
-    setIsLoading(true);
+  const findVidegraphy = useCallback(async () => {
     await axiosInstance
-      .get(`/api/artist/${slug}/`) //stavit slug
+      .get(`/api/videography/${slug}/`)
       .then((response) => {
-        console.log("geArtistData resp: ", response);
-        setArtistData(response.data);
-        findVidegraphy(response.data);
+        console.log("findVidegraphy resp: ", response);
+        setVideographyList(response.data);
       })
       .catch((error) => {
-        console.log("Something went wrong geArtistData!", error);
+        console.log("Something went wrong findVidegraphy!", error);
+      });
+  }, [slug]);
+
+  const getArtistData = useCallback(async () => {
+    setIsLoading(true);
+    await axiosInstance
+      .get(`/api/artist/${slug}/`)
+      .then((response) => {
+        console.log("getArtistData resp: ", response);
+        setArtistData(response.data);
+        findVidegraphy();
+      })
+      .catch((error) => {
+        console.log("Something went wrong getArtistData!", error);
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [slug]);
+  }, [slug, findVidegraphy]);
 
   useEffect(() => {
-    geArtistData();
-  }, [geArtistData]);
+    getArtistData();
+  }, [getArtistData]);
 
   const renderVideographyList = () => {
     return videographyList.map((video, index) => {
@@ -62,6 +56,7 @@ export default function Artist(props) {
             ${styles.videographyCardWrapper}
             ${index % 2 && styles.everySecondBackground}
           `}
+          key={index}
         >
           <div
             className={styles.videographyImageWrapper}
@@ -84,8 +79,8 @@ export default function Artist(props) {
             >
               {video.title}
             </div>
-            <div>{video.releaseYear}</div>
-            {/* <div>as something</div> */}
+            <div className={styles.cardInfo}>{video.release_year}</div>
+            <div className={styles.cardInfo}>Album: {video.album}</div>
           </div>
         </div>
       );

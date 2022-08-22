@@ -32,7 +32,6 @@ export default function RateModal(props) {
         })
         .then((response) => {
           console.log("updateRating resp: ", response);
-          console.log("newRating: ", newRating);
           setUserRating(newRating);
           setIsModalOpen(false);
         })
@@ -40,18 +39,12 @@ export default function RateModal(props) {
           console.log("Something went wrong updateRating!", error);
         });
     } else {
-      console.log("POST data", {
-        user: user.user_id,
-        musicVideo: 3,
-        rating: newRating,
-        date: "2013-06-23T00:00:00Z", //popravi date
-      });
       await axiosInstance
         .post(`/api/rating/`, {
           user: user.user_id,
-          musicVideo: 1,
+          musicVideo: videoData.id,
           rating: newRating,
-          date: "2013-06-23T00:00:00Z", //popravi date
+          date: "2013-06-23", //popravi date
         })
         .then((response) => {
           console.log("addRating resp: ", response);

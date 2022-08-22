@@ -1,7 +1,6 @@
 import VideoCard from "components/common/VideoCard/VideoCard";
-import React, { useCallback, useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { userLists } from "utils/data";
+import React, { useCallback, useEffect, useState, useContext } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -10,50 +9,70 @@ import styles from "./UserList.module.css";
 import Search from "components/search/Search";
 import TextFieldWrapper from "components/common/TextFieldWrapper/TextFieldWrapper";
 import axiosInstance from "utils/axiosApi";
+import { AuthContext } from "context/AuthProvider";
+import Moment from "moment";
 
-export default function UserList(props) {
+export default function UserList() {
   const { slug } = useParams();
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const accName = "AccountName";
   const location = useLocation();
   const [listData, setListData] = useState();
   const [listDataList, setListDataList] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(location.state ? true : false);
-  const [listTitle, setListTitle] = useState();
+  const [listName, setListName] = useState();
 
   const getList = useCallback(async () => {
+    setIsLoading(true);
+
     await axiosInstance
-      .get(`/api/video-list/${slug}/`)
+      .get(`/api/video-lists/${slug}/`)
       .then((response) => {
         console.log("list resp: ", response);
         setListData(response.data);
-        setListTitle(response.data.title);
+        setListName(response.data.title);
         setListDataList(response.data.musicVideos);
-        setIsLoading(false);
       })
       .catch((error) => {
         console.log("Something went wrong list!", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
-  }, []);
+
+    setIsLoading(false);
+  }, [slug]);
 
   useEffect(() => {
     getList();
-    // userLists.forEach((list) => {
-    //   if (list.slug === slug) {
-    //     setListData(list);
-    //     setListTitle(list.name);
-    //     setListDataList(list.list);
-    //     setIsLoading(false);
-    //   }
-    // });
-    // setIsLoading(false);
-  }, [setIsLoading, slug, isLoading]);
+  }, [getList]);
+  const deleteList = async () => {
+    await axiosInstance
+      .delete(`/api/video-lists/${slug}/`)
+      .then((response) => {
+        console.log("deleteList resp: ", response);
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.log("Something went wrong deleteList!", error);
+      });
+  };
 
-  const submitEdit = () => {
+  const submitEdit = async () => {
+    let idList = [];
+    listDataList.map((item) => idList.push(item.id));
+    await axiosInstance
+      .put(`/api/video-lists/${slug}/`, {
+        title: listName,
+        user: user.user_id,
+        musicVideos: idList,
+      })
+      .then((response) => {
+        console.log("updateList resp: ", response);
+        navigate(`../list/${response.data.slug}`);
+      })
+      .catch((error) => {
+        console.log("Something went wrong updateList!", error);
+      });
     setIsEdit(false);
   };
 
@@ -79,7 +98,7 @@ export default function UserList(props) {
 
     setListDataList([...tempList]);
   };
-  console.log("listTitle: ", listTitle);
+
   const renderListName = () => {
     if (isEdit) {
       return (
@@ -88,19 +107,15 @@ export default function UserList(props) {
             id="name"
             name="name"
             label="List Name"
-            value={listTitle}
-            onChange={(value) => setListTitle(value.target.value)}
+            value={listName}
+            onChange={(value) => setListName(value.target.value)}
             // error={formik.touched.username && Boolean(formik.errors.username)}
             // helperText={formik.touched.username && formik.errors.username}
           />
         </div>
       );
     } else {
-      return (
-        <div className={styles.titleName}>
-          {`${accName}'s ${listData.name}`}
-        </div>
-      );
+      return <div className={styles.titleName}>{`${listData.title}`}</div>;
     }
   };
 
@@ -108,10 +123,9 @@ export default function UserList(props) {
     return (
       <div>
         {listDataList.map((item, index) => {
-          console.log('list item: ', item)
           return (
             <div key={item.slug} className={styles.videoCardWrapper}>
-              <VideoCard item={item} index={index} showNumber />
+              <VideoCard item={item} index={index} fromList />
               {isEdit && (
                 <div
                   className={`${styles.editButtons} ${
@@ -124,12 +138,14 @@ export default function UserList(props) {
                       handleDelete(item.id);
                     }}
                   />
-                  <ExpandLessIcon
+                  {/* <ExpandLessIcon
                     className={
                       index > 0 ? styles.arrowIcon : styles.arrowIconDisabled
                     }
                     onClick={() => {
-                      moveUp(index);
+                      if (index > 0) {
+                        moveUp(index);
+                      }
                     }}
                   />
                   <ExpandMoreIcon
@@ -139,9 +155,11 @@ export default function UserList(props) {
                         : styles.arrowIconDisabled
                     }
                     onClick={() => {
-                      moveDown(index);
+                      if (index + 1 !== listDataList.length) {
+                        moveDown(index);
+                      }
                     }}
-                  />
+                  /> */}
                 </div>
               )}
             </div>
@@ -162,6 +180,7 @@ export default function UserList(props) {
               <div className={styles.editHeader}>
                 <div
                   onClick={() => {
+                    getList();
                     setIsEdit(false);
                   }}
                   className={styles.editCancelButton}
@@ -185,18 +204,27 @@ export default function UserList(props) {
                   onEdit={() => {
                     setIsEdit(true);
                   }}
+                  onDelete={() => {
+                    deleteList();
+                  }}
                 />
               )}
             </div>
             <div className={styles.editSearchAndFinish}></div>
             <div className={styles.listInfo}>
-              By <div className={styles.userLink}>{accName}</div> | Created:{" "}
-              {listData.dateCreated} | Updated: {listData.lastModified}
+              By <div className={styles.userLink}>{user.username}</div> |
+              Created: {Moment(listData.date_created).format("YYYY-MM-DD")} |
+              Updated: {Moment(listData.date_updated).format("YYYY-MM-DD")}
             </div>
             {isEdit && (
               <div className={styles.addMoreWrapper}>
                 <div className={styles.addMore}>Add more:</div>
-                <Search />
+                <Search
+                  onResultClick={(item) => {
+                    setListDataList((oldArray) => [...oldArray, item]);
+                  }}
+                  list={listDataList}
+                />
               </div>
             )}
             <div className={styles.userList}>{renderList()}</div>

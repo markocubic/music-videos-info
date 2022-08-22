@@ -1,0 +1,30 @@
+.root {
+  margin: 0 auto;
+  width: 600px;
+}
+.title {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+.textField {
+  margin-bottom: 25px;
+  height: 60px;
+}
+.textArea {
+  padding-left: 15px;
+  margin-bottom: 25px;
+  width: 100%;
+  border-radius: 10px;
+  border-color: rgb(187, 186, 186);
+}
+.pickAnArtist {
+  margin-bottom: 10px;
+}
+.artist {
+  font-weight: 500;
+}
+.button {
+  margin-top: 30px;
+  width: 200px;
+}

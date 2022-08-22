@@ -8,7 +8,7 @@ import styles from "./OptionsButton.module.css";
 import "./overridenStylesOptionsButton.css";
 
 export default function OptionsButton(props) {
-  const { onEdit } = props;
+  const { onEdit, onDelete } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClickOptions = (event) => {
@@ -43,6 +43,7 @@ export default function OptionsButton(props) {
         </MenuItem>
         <MenuItem
           onClick={() => {
+            onDelete();
             handleCloseOptions();
           }}
         >

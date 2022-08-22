@@ -150,7 +150,7 @@ export default function Header() {
     <div className={styles.root}>
       <div className={styles.logoSearchWrapper}>
         {renderLogo()}
-        <Search isFilter />
+        <Search isFilter isNavigate />
       </div>
       <div className={styles.accountWrapper}>{renderAccount()}</div>
       <AuthModal

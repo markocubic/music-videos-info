@@ -6,6 +6,11 @@
 .contentWrapper {
   margin-top: 20px;
 }
+.topWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 .titleWrapper {
   display: flex;
   flex-direction: row;
@@ -24,6 +29,7 @@
   margin-left: 6px;
   font-size: 20px;
   font-weight: 500;
+  width: fit-content;
   cursor: pointer;
   color: #136BB2;
 }
@@ -158,4 +164,44 @@
 }
 .creditsSection {
   margin-top: 20px;
+}
+.buttons {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+
+.editButton {
+  margin-left: 10px;
+  padding: 0px 10px 0px 10px;
+  min-width: 100px;
+  height: 30px;
+  border: 1px solid #136BB2;
+  background-color: #136BB2;
+}
+.editButton:hover {
+  background-color: white;
+  color: #136BB2;
+}
+.textField {
+  margin-right: 10px;
+  height: 60px;
+}
+.songInfo {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid rgb(187, 186, 186);
+  border-radius: 10px;
+}
+.smallTitle {
+  font-size: 18px;
+  font-weight: 500;
+}
+.textArea {
+  margin-top: 10px;
+  max-width: 100%;
+  border-radius: 10px;
+}
+.songDescription {
+  max-width: 608px
 }

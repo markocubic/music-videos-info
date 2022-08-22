@@ -2,11 +2,16 @@ import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
+
 import styles from "./MusicVideo.module.css";
 import RateModal from "components/common/RateModal/RateModal";
 import LinkRowArtist from "components/common/LinkRowArtist/LinkRowArtist";
 import { AuthContext } from "context/AuthProvider";
 import axiosInstance from "utils/axiosApi";
+import { GENRE_CHOICES } from "utils/constants";
+import ButtonRed from "components/common/ButtonCustom/ButtonRed";
+import TextFieldWrapper from "components/common/TextFieldWrapper/TextFieldWrapper";
 
 export default function MusicVideo() {
   const { slug } = useParams();
@@ -19,13 +24,19 @@ export default function MusicVideo() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRating, setUserRating] = useState();
   const [userRatingData, setUserRatingData] = useState();
+  const [isEdit, setIsEdit] = useState(false);
+  const [title, setTitle] = useState();
+  const [songDescription, setSongDescription] = useState();
 
   const getVideoData = useCallback(async () => {
     await axiosInstance
-      .get(`/api/music-video/${slug}/`) //stavit slug
+      .get(`/api/music-video/${slug}/`)
       .then((response) => {
         console.log("getVideoData resp: ", response);
         setVideoData(response.data);
+        setTitle(response.data.title);
+        setSongDescription(response.data.song_description);
+        setUserRating(null);
       })
       .catch((error) => {
         console.log("Something went wrong getVideoData!", error);
@@ -37,23 +48,23 @@ export default function MusicVideo() {
 
   const getVideoAndRatingData = useCallback(async () => {
     await axiosInstance
-      .get(`/api/rating/${user.user_id}/1/`) //stavit slug
+      .get(`/api/rating/${user.user_id}/${slug}/`)
       .then((response) => {
         console.log("getVideoAndRatingData resp: ", response);
-        if (response.data.rating === null) {
-          getVideoData();
-        }
         setUserRatingData(response.data);
         setUserRating(response.data.rating);
         setVideoData(response.data.musicVideo);
+        setTitle(response.data.musicVideo.title);
+        setSongDescription(response.data.musicVideo.song_description);
       })
       .catch((error) => {
+        getVideoData();
         console.log("Something went wrong getVideoAndRatingData!", error);
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [user, getVideoData]);
+  }, [user, getVideoData, slug]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -64,6 +75,22 @@ export default function MusicVideo() {
     }
     setIsLoading(false);
   }, [user, slug, getVideoAndRatingData, getVideoData, userRating]);
+
+  const submitEdit = async () => {
+    await axiosInstance
+      .put(`/api/music-video/${slug}/`, {
+        title: title,
+        song_description: songDescription,
+      })
+      .then((response) => {
+        console.log("submitEdit resp: ", response);
+        getVideoAndRatingData();
+        navigate(`../music-video/${response.data.slug}`);
+      })
+      .catch((error) => {
+        console.log("Something went wrong submitEdit!", error);
+      });
+  };
 
   const renderVideoRatings = () => {
     return (
@@ -123,16 +150,12 @@ export default function MusicVideo() {
           <div className={styles.infoBold}>Album:</div>
           <div className={styles.linkText}>{videoData.album}</div>
         </div>
-        <div className={styles.infoRow}>
-          <div className={styles.infoBold}>Genres:</div>
-          {/* {videoData.genres.map((genre, index) => {
-            return (
-              <div key={index} className={styles.label}>
-                {genre}
-              </div>
-            );
-          })} */}
-        </div>
+        {videoData.genre && (
+          <div className={styles.infoRow}>
+            <div className={styles.infoBold}>Genre:</div>
+            <div>{GENRE_CHOICES[videoData.genre]}</div>
+          </div>
+        )}
       </div>
     );
   };
@@ -149,24 +172,93 @@ export default function MusicVideo() {
     );
   };
 
+  const renderTitle = () => {
+    if (isEdit) {
+      return (
+        <div className={styles.textField}>
+          <TextFieldWrapper
+            id="title"
+            name="title"
+            label="Title"
+            value={title}
+            onChange={(value) => setTitle(value.target.value)}
+            // error={formik.touched.username && Boolean(formik.errors.username)}
+            // helperText={formik.touched.username && formik.errors.username}
+          />
+        </div>
+      );
+    }
+    return <div className={styles.title}>{videoData.title}</div>;
+  };
+
+  const renderTop = () => {
+    return (
+      <div className={styles.topWrapper}>
+        <div className={styles.titleWrapper}>
+          {renderTitle()}
+          <div className={styles.titleBy}>by</div>
+          <div
+            className={styles.titleArtist}
+            onClick={() => {
+              navigate(`../artist/${videoData.artist.slug}`);
+            }}
+          >
+            {videoData.artist.name}
+          </div>
+        </div>
+        {user.is_staff && (
+          <div className={styles.buttons}>
+            {isEdit && (
+              <ButtonRed
+                className={styles.editButton}
+                onClick={() => setIsEdit(!isEdit)}
+              >
+                Cancel
+              </ButtonRed>
+            )}
+            <ButtonRed
+              className={styles.editButton}
+              onClick={() => {
+                submitEdit();
+                setIsEdit(!isEdit);
+              }}
+            >
+              {isEdit ? "Done editing" : "Edit"}
+            </ButtonRed>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderSongInfo = () => {
+    return (
+      <div className={styles.songInfo}>
+        <div className={styles.smallTitle}>About the song:</div>
+        {isEdit ? (
+          <TextareaAutosize
+            placeholder="Add description"
+            className={styles.textArea}
+            defaultValue={songDescription}
+            onChange={(value) => setSongDescription(value.target.value)}
+            minRows={3}
+          />
+        ) : (
+          <div className={styles.songDescription}>
+            {videoData.song_description}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   if (isLoading || !videoData) {
     return;
   } else {
     return (
       <div className={styles.root}>
         <div className={styles.contentWrapper}>
-          <div className={styles.titleWrapper}>
-            <div className={styles.title}>{videoData.title}</div>
-            <div className={styles.titleBy}>by</div>
-            <div
-              className={styles.titleArtist}
-              onClick={() => {
-                navigate(`../artist/${videoData.artist.slug}`);
-              }}
-            >
-              {/* {videoData.artist.name} */}
-            </div>
-          </div>
+          {renderTop()}
           <div className={styles.videoAndMainInfo}>
             <div className={styles.videoWrapper}>
               <iframe
@@ -185,6 +277,7 @@ export default function MusicVideo() {
             </div>
           </div>
           {/* {renderCredits()} */}
+          {renderSongInfo()}
         </div>
         <RateModal
           isModalOpen={isModalOpen}
