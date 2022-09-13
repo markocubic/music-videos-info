@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import ButtonRed from "components/common/ButtonCustom/ButtonRed";
+import ButtonCustom from "components/common/ButtonCustom/ButtonCustom";
 import styles from "./Account.module.css";
 import axiosInstance from "utils/axiosApi";
 import { AuthContext } from "context/AuthProvider";
@@ -32,14 +32,14 @@ export default function Account() {
       <div className={styles.section}>
         <div className={styles.title}>You are a staff member</div>
         Add a video to MusicVideos.com
-        <ButtonRed
+        <ButtonCustom
           className={styles.button}
           onClick={() => {
             navigate("../music-video-create");
           }}
         >
           Add a video
-        </ButtonRed>
+        </ButtonCustom>
       </div>
       <div className={styles.section}>
         <div className={styles.title}>Your Ratings</div>
@@ -51,14 +51,14 @@ export default function Account() {
         <div>
           Share your video or celebrity picks with everyone at MusicVideos.com,
           or make it private just for you.
-          <ButtonRed
+          <ButtonCustom
             className={styles.button}
             onClick={() => {
               navigate("../list-create");
             }}
           >
             Create a list
-          </ButtonRed>
+          </ButtonCustom>
         </div>
         <div className={styles.ratingsListWrapper}></div>
       </div>

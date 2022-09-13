@@ -50,13 +50,19 @@
   border-bottom: 1px solid rgb(236, 236, 236);
 }
 .searchItemCardImageWrapper {
+  position: relative;
+  overflow: hidden;
   padding: 8px 15px 0px 5px;
-  width: 100px;
+  margin: 5px 15px 5px 10px;
+  width: 80px;
   height: 50px;
 }
 .searchItemCardImage {
-  height: 100%;
-  width: 100%;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  width: 80px;
   background-repeat: "no-repeat";
   object-fit: "contain";
 }

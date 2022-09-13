@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { MenuItem, Select } from "@mui/material";
-import SouthIcon from "@mui/icons-material/South";
-import NorthIcon from "@mui/icons-material/North";
 import axiosInstance from "utils/axiosApi";
-import {
-  filterOptionsRatings,
-  sortOptionsRatings,
-} from "utils/data";
+import { filterOptionsRatings, sortOptionsRatings } from "utils/data";
 import VideoCard from "components/common/VideoCard/VideoCard";
 import styles from "./UserRatings.module.css";
 import "./overridenStylesUserRatings.css";
@@ -18,12 +13,21 @@ export default function UserRatings() {
   const [ratingsList, setRatingsList] = useState();
   const [filter, setFilter] = useState(filterOptionsRatings[0].value);
   const [sort, setSort] = useState(sortOptionsRatings[0].value);
-  const [isDownIconSelected, setIsDownIconSelected] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getRatings = useCallback(async () => {
+  const getRatings = useCallback(async (filterValue=null, sortValue=null) => {
+    if (!filterValue) {
+      filterValue = filter;
+    } 
+    if (!sortValue) {
+      sortValue = sort;
+    }
+
+    let filterData = filterOptionsRatings.find(item => item.value === filterValue);
+    let sortData = sortOptionsRatings.find(item => item.value === sortValue);
+
     await axiosInstance
-      .get(`/api/rating/${user.user_id}/`)
+      .get(`/api/rating/${user.user_id}/${filterData.id}/${sortData.payload}/`)
       .then((response) => {
         console.log("rating resp: ", response);
         setRatingsList(response.data);
@@ -34,7 +38,7 @@ export default function UserRatings() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [user]);
+  }, [user, filter, sort]);
 
   useEffect(() => {
     getRatings();
@@ -42,10 +46,12 @@ export default function UserRatings() {
 
   const handleChangeFilter = (event) => {
     setFilter(event.target.value);
+    getRatings(event.target.value, null);
   };
 
   const handleChangeSort = (event) => {
     setSort(event.target.value);
+    getRatings(null, event.target.value);
   };
 
   const renderFilterAndSort = () => {
@@ -90,18 +96,6 @@ export default function UserRatings() {
               );
             })}
           </Select>
-          <SouthIcon
-            className={
-              isDownIconSelected ? styles.orderSelected : styles.orderIcon
-            }
-            onClick={() => setIsDownIconSelected(true)}
-          />
-          <NorthIcon
-            className={
-              !isDownIconSelected ? styles.orderSelected : styles.orderIcon
-            }
-            onClick={() => setIsDownIconSelected(false)}
-          />
         </div>
       </div>
     );
@@ -111,7 +105,7 @@ export default function UserRatings() {
     return (
       <div>
         {ratingsList.map((item, index) => {
-          return <VideoCard key={index} item={item} index={index} />;
+          return <VideoCard key={item.id} item={item} index={index} />;
         })}
       </div>
     );

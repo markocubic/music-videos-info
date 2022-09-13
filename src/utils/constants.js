@@ -9,3 +9,7 @@ export const GENRE_CHOICES = {
   'synthpop':'Synth-Pop',
   'heavymetal':'Heavy-Metal',
 }
+export const ARTIST_CHOICES = {
+  'artist': 'artist',
+  'band': 'band',
+}

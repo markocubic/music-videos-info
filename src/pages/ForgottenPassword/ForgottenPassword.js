@@ -3,7 +3,7 @@ import React from "react";
 import TextFieldWrapper from "components/common/TextFieldWrapper/TextFieldWrapper";
 import * as Yup from "yup";
 import styles from "./ForgottenPassword.module.css";
-import ButtonRed from "components/common/ButtonCustom/ButtonRed";
+import ButtonCustom from "components/common/ButtonCustom/ButtonCustom";
 
 const ValidationSchema = Yup.object().shape({
   email: Yup.string("Enter your email")
@@ -40,7 +40,7 @@ export default function ForgottenPassword() {
             helperText={formik.touched.email && formik.errors.email}
           />
         </div>
-        <ButtonRed className={styles.button}>Send code</ButtonRed>
+        <ButtonCustom className={styles.button}>Send code</ButtonCustom>
       </form>
     </div>
   );

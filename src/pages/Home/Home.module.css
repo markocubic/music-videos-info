@@ -1,7 +1,8 @@
 .content {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  /* flex-direction: column;
+  align-items: center; */
+  justify-content: center;
 }
 
 .topContent {
@@ -26,4 +27,9 @@
   border: 2px solid #E60022;
   border-radius: 10px;
   width: 300px;
+}
+.welcomeText {
+  margin-top: 200px;
+  font-size: 56px;
+  color: #136BB2;
 }

@@ -9,7 +9,6 @@ import Moment from "moment";
 
 export default function VideoCard(props) {
   const { item, index, fromList } = props;
-
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userRating, setUserRating] = useState(item.rating);
@@ -47,14 +46,6 @@ export default function VideoCard(props) {
         </div>
         <div className={styles.headerInfo}>
           <div>{musicVideoData.duration}</div>
-          <div className={styles.separator} />
-          {/* {item.genres.map((genre, index) => {
-            return (
-              <div key={index} className={styles.genre}>{`${genre}${
-                item.genres.length - 1 !== index ? "," : " "
-              }`}</div>
-            );
-          })} */}
         </div>
         {!fromList && (
           <div
@@ -73,36 +64,10 @@ export default function VideoCard(props) {
             )}
           </div>
         )}
-        <div className={styles.ratingDate}>Rated on 12. 10. 2022.</div>
-        <div className={styles.credit}>
-          Director:
-          <div
-            className={styles.creditLink}
-            onClick={() => {
-              navigate(`../artist/${item.credits.director.slug}`);
-            }}
-          >
-            {/* {item.credits.director.name} */}
-          </div>
+        <div className={styles.ratingDate}>
+          {Moment(item.date).format("YYYY-MM-DD")}
         </div>
-        <div className={styles.credit}>
-          Stars:
-          {/* {item.credits.cast.map((cast, index) => {
-            return (
-              <div
-                key={index}
-                className={styles.creditLink}
-                onClick={() => {
-                  navigate(`../artist/${cast.slug}`);
-                }}
-              >
-                {`${cast.name}${
-                  item.credits.cast.length - 1 !== index ? "," : " "
-                }`}
-              </div>
-            );
-          })} */}
-        </div>
+        <div className={styles.credit}></div>
         <div className={styles.numberOfVotes}>
           Votes: {musicVideoData.votes_number}
         </div>

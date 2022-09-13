@@ -1,4 +1,4 @@
-import ButtonRed from "components/common/ButtonCustom/ButtonRed";
+import ButtonCustom from "components/common/ButtonCustom/ButtonCustom";
 import UserListCard from "components/common/UserListCard/UserListCard";
 import { AuthContext } from "context/AuthProvider";
 import React, { useCallback, useContext, useEffect, useState } from "react";
@@ -40,14 +40,14 @@ export default function UserLists() {
       <div className={styles.contentWrapper}>
         <div className={styles.titleWrapper}>
           <div className={styles.title}>Your Lists</div>
-          <ButtonRed
+          <ButtonCustom
             className={styles.button}
             onClick={() => {
               navigate("../list-create", { state: { isNew: true } });
             }}
           >
             Create new
-          </ButtonRed>
+          </ButtonCustom>
         </div>
         {list.map((item, index) => {
           return (
@@ -55,7 +55,7 @@ export default function UserLists() {
               key={index}
               item={item}
               index={index}
-              getLists={() => getLists}
+              getLists={() => getLists()}
             />
           );
         })}

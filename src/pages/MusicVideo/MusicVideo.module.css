@@ -197,11 +197,72 @@
   font-size: 18px;
   font-weight: 500;
 }
+.editDescriptionWrapper {
+  width: 808px;
+}
 .textArea {
   margin-top: 10px;
-  max-width: 100%;
+  padding: 10px;
+  width: 100%;
   border-radius: 10px;
 }
 .songDescription {
   max-width: 608px
+}
+.reviewWrapper {
+  margin-top: 10px;
+  margin-bottom: 25px;
+  padding: 10px;
+  width: 808px;
+  border: 1px solid rgb(187, 186, 186);
+  border-radius: 10px;
+}
+.reviewHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  border-bottom:  1px solid rgb(215, 214, 214);
+}
+.reviewTitle {
+  font-weight: 500;
+}
+.reviewInfo {
+  color: rgb(105, 105, 105);
+}
+.userReviewWrapper {
+  margin-bottom: 20px;
+  border: 1px solid #136BB2;
+}
+.userReviewBottom {
+  margin-bottom: 30px;
+  border: 1px solid #136BB2;
+}
+.userReviewText {
+  padding-bottom: 8px;
+  border-bottom:  1px solid rgb(215, 214, 214);
+}
+.reviewButtonsWrapper {
+  display: flex;
+  flex-direction: row;
+}
+.reviewButton {
+  margin-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  height: 25px;
+  background-color: #136BB2;
+  width: 152px;
+}
+.reviewButton:hover {
+  background-color: white;
+  color: #136BB2;
+  border: 1px solid #136BB2;
+}
+.cancelReviewButton {
+  margin-left: 10px;
+}
+.textFieldReview {
+  height: 60px;
 }

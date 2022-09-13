@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "./ButtonRed.module.css";
+import styles from "./ButtonCustom.module.css";
 
-export default function ButtonRed(props) {
+export default function ButtonCustom(props) {
   const { className, children, onClick } = props;
 
   return (

@@ -353,9 +353,11 @@ export const sortOptionsRatings = [
   {
     id: 0,
     value: "Top Rated",
+    payload: "top",
   },
   {
     id: 1,
     value: "Most Recent",
+    payload: "date",
   },
 ];

@@ -5,10 +5,9 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import CloseIcon from "@mui/icons-material/Close";
 import Modal from "@mui/material/Modal";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import TextFieldWrapper from "../TextFieldWrapper/TextFieldWrapper";
-import ButtonRed from "../ButtonCustom/ButtonRed";
+import ButtonCustom from "../ButtonCustom/ButtonCustom";
 import { AuthContext } from "context/AuthProvider";
 import jwt_decode from "jwt-decode";
 import { setUserToken } from "services/userService";
@@ -44,6 +43,8 @@ export default function AuthModal(props) {
   const { isModalOpen, isSignIn, setIsSignIn } = props;
   const { setAuthTokens, setUser, setIsSignInOpen } = useContext(AuthContext);
   const [validationSchema, setValidationSchema] = useState();
+  const [loginError, setLoginError] = useState();
+  const [signupError, setSignupError] = useState({ email: "", username: "" });
 
   useEffect(() => {
     if (isSignIn) {
@@ -53,8 +54,6 @@ export default function AuthModal(props) {
     }
   }, [isSignIn]);
 
-  const navigate = useNavigate();
-
   const login = async (username, password) => {
     await axiosInstancePrivate
       .post("/api/token/", { username: username, password: password })
@@ -63,9 +62,11 @@ export default function AuthModal(props) {
         setUserToken(JSON.stringify(response.data));
         setUser(jwt_decode(response.data.access));
         setIsSignInOpen(false);
+        setLoginError("");
       })
       .catch((error) => {
         console.log("Something went wrong!", error);
+        setLoginError(error.response.data.detail);
       });
   };
 
@@ -78,9 +79,11 @@ export default function AuthModal(props) {
       })
       .then(() => {
         setIsSignIn(true);
+        setSignupError({ email: "", username: "" });
       })
       .catch((err) => {
         console.log("Something went wrong!", err);
+        setSignupError(err.response.data);
       });
   };
 
@@ -149,6 +152,8 @@ export default function AuthModal(props) {
       onClose={() => {
         formik.resetForm();
         setIsSignInOpen(false);
+        setSignupError({ email: "", username: "" });
+        setLoginError("");
       }}
       style={{
         display: "flex",
@@ -173,35 +178,31 @@ export default function AuthModal(props) {
 
           <div className={styles.modalTitle}>Welcome to MusicVideos.com</div>
           <div className={styles.modalForm}>
+            <div className={styles.error}>{loginError}</div>
+            <div className={styles.error}>{signupError?.email}</div>
+            <div className={styles.error}>{signupError?.username}</div>
             <form onSubmit={formik.handleSubmit}>{renderFields()}</form>
-            {isSignIn && (
-              <div
-                className={styles.forgotPasswordText}
-                onClick={() => {
-                  setIsSignInOpen(false);
-                  navigate("../forgotten-password");
-                }}
-              >
-                Forgotten your password?
-              </div>
-            )}
           </div>
-          <ButtonRed
+          <ButtonCustom
             className={styles.modalButton}
             onClick={formik.handleSubmit}
           >
             {isSignIn ? "Log In" : "Sign Up"}
-          </ButtonRed>
-          <div className={styles.termsText}>
-            By continuing, you agree to{" "}
-            <b className={styles.boldText}>MusicVideo.com</b>'s <br />
-            Terms of Service and acknowledge that you've <br />
-            read our <b className={styles.boldText}>Privacy Policy</b>
-          </div>
+          </ButtonCustom>
+          {!isSignIn && (
+            <div className={styles.termsText}>
+              By continuing, you agree to{" "}
+              <b className={styles.boldText}>MusicVideo.com</b>'s <br />
+              Terms of Service and acknowledge that you've <br />
+              read our <b className={styles.boldText}>Privacy Policy</b>
+            </div>
+          )}
           <div className={styles.separatorLine} />
           <div
             className={styles.dontHaveAccount}
             onClick={() => {
+              setLoginError("");
+              setSignupError({ email: "", username: "" });
               isSignIn ? setIsSignIn(false) : setIsSignIn(true);
             }}
           >

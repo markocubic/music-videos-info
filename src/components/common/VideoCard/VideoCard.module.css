@@ -59,6 +59,8 @@
 .rating {
   display: flex;
   flex-direction: row;
+  margin-top: 10px;
+  margin-bottom: 20px;
   width: fit-content;
   cursor: pointer;
 }

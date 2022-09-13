@@ -2,11 +2,11 @@ import LinkRowArtist from "components/common/LinkRowArtist/LinkRowArtist";
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "utils/axiosApi";
-import { artist, band, musicVideos } from "utils/data";
+import { ARTIST_CHOICES } from "utils/constants";
 
 import styles from "./Artist.module.css";
 
-export default function Artist(props) {
+export default function Artist() {
   const { slug } = useParams();
   const navigate = useNavigate();
 
@@ -103,13 +103,12 @@ export default function Artist(props) {
 
           <div className={styles.midContentWrapper}>
             <LinkRowArtist
-              title={isBand ? "Formed:" : "Born:"}
+              title={
+                artistData.type === ARTIST_CHOICES.band ? "Formed:" : "Born:"
+              }
               item={artistData.birth}
               noLink
             />
-            {isBand && (
-              <LinkRowArtist title="Members:" item={artistData.members} />
-            )}
             <div className={styles.videographyWrapper}>
               <div className={styles.smallTitle}>Videography: </div>
               {renderVideographyList()}

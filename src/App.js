@@ -23,17 +23,21 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/" element={<PrivateRoute />}>
                 <Route exact path="/account" element={<Account />} />
+                <Route
+                  exact
+                  path="/music-video-create"
+                  element={<CreateMusicVideo />}
+                />
+                <Route exact path="/user-ratings" element={<UserRatings />} />
+                <Route exact path="/user-lists" element={<UserLists />} />
+                <Route exact path="/list/:slug" element={<UserList />} />
                 <Route exact path="/list-create" element={<CreateUserList />} />
-                <Route exact path="/music-video-create" element={<CreateMusicVideo />} />
               </Route>
               <Route
                 exact
                 path="/forgotten-password"
                 element={<ForgottenPassword />}
               />
-              <Route exact path="/user-ratings" element={<UserRatings />} />
-              <Route exact path="/user-lists" element={<UserLists />} />
-              <Route exact path="/list/:slug" element={<UserList />} />
               <Route exact path="/music-video/:slug" element={<MusicVideo />} />
               <Route exact path="/artist/:slug" element={<Artist />} />
             </Route>

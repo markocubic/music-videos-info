@@ -34,7 +34,7 @@ export default function UserListCard(props) {
       >
         {item.title}
       </div>
-      <div>{item.musicVideos.length} items</div>
+      <div>{item.musicVideos.length} videos</div>
       <div className={styles.dates}>
         Modified: {Moment(item.date_updated).format("YYYY-MM-DD")} | Created: {Moment(item.date_created).format("YYYY-MM-DD")}
       </div>

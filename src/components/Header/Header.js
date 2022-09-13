@@ -16,7 +16,8 @@ import { AuthContext } from "context/AuthProvider";
 
 export default function Header() {
   const navigate = useNavigate();
-  const { user, logOutUser, isSignInOpen, setIsSignInOpen } = useContext(AuthContext);
+  const { user, logOutUser, isSignInOpen, setIsSignInOpen } =
+    useContext(AuthContext);
   const [isSignIn, setIsSignIn] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -93,14 +94,16 @@ export default function Header() {
               onClose={handleCloseAccountDropdown}
               TransitionComponent={Fade}
             >
-              <MenuItem
-                onClick={() => {
-                  handleCloseAccountDropdown();
-                  navigate("../account");
-                }}
-              >
-                Your activity
-              </MenuItem>
+              {user?.is_staff && (
+                <MenuItem
+                  onClick={() => {
+                    handleCloseAccountDropdown();
+                    navigate("../music-video-create");
+                  }}
+                >
+                  Create a video
+                </MenuItem>
+              )}
               <MenuItem
                 onClick={() => {
                   handleCloseAccountDropdown();

@@ -11,6 +11,7 @@ import TextFieldWrapper from "components/common/TextFieldWrapper/TextFieldWrappe
 import axiosInstance from "utils/axiosApi";
 import { AuthContext } from "context/AuthProvider";
 import Moment from "moment";
+import ButtonCustom from "components/common/ButtonCustom/ButtonCustom";
 
 export default function UserList() {
   const { slug } = useParams();
@@ -178,7 +179,7 @@ export default function UserList() {
           <div className={styles.contentWrapper}>
             {isEdit && (
               <div className={styles.editHeader}>
-                <div
+                <ButtonCustom
                   onClick={() => {
                     getList();
                     setIsEdit(false);
@@ -186,15 +187,15 @@ export default function UserList() {
                   className={styles.editCancelButton}
                 >
                   Cancel
-                </div>
-                <div
+                </ButtonCustom>
+                <ButtonCustom
                   onClick={() => {
                     submitEdit();
                   }}
                   className={styles.editDoneButton}
                 >
                   Done editing
-                </div>
+                </ButtonCustom>
               </div>
             )}
             <div className={styles.titleWrapper}>
