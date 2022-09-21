@@ -48,8 +48,6 @@
 .mainInfoWrapper {
   margin-left: 20px;
 }
-.ratingWrapper {
-}
 .ratingTitle {
   margin-bottom: 5px;
   font-size: 14px;
@@ -265,4 +263,20 @@
 }
 .textFieldReview {
   height: 60px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .videoAndMainInfo {
+    flex-direction: column;
+  }
+  .mainInfoWrapper {
+    margin-top: 10px;
+    margin-left: 0px;
+  }
+  .editDescriptionWrapper {
+    width: 600px;
+  }
+  .reviewWrapper {
+    width: 600px;
+  }
 }

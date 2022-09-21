@@ -2,8 +2,6 @@ import VideoCard from "components/common/VideoCard/VideoCard";
 import React, { useCallback, useEffect, useState, useContext } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import OptionsButton from "components/common/OptionsButton/OptionsButton";
 import styles from "./UserList.module.css";
 import Search from "components/search/Search";

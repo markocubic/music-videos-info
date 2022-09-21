@@ -1,6 +1,6 @@
 import VideoCard from "components/common/VideoCard/VideoCard";
-import React, { useContext, useEffect, useState } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -11,12 +11,10 @@ import axiosInstance from "utils/axiosApi";
 import { AuthContext } from "context/AuthProvider";
 
 export default function CreateUserList() {
-  const { slug } = useParams();
   const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
-  const [listData, setListData] = useState();
   const [listDataList, setListDataList] = useState([]);
   const [listName, setListName] = useState();
 
@@ -95,7 +93,7 @@ export default function CreateUserList() {
                     handleDelete(item.id);
                   }}
                 />
-                <ExpandLessIcon
+                {/* <ExpandLessIcon
                   className={
                     index > 0 ? styles.arrowIcon : styles.arrowIconDisabled
                   }
@@ -112,7 +110,7 @@ export default function CreateUserList() {
                   onClick={() => {
                     moveDown(index);
                   }}
-                />
+                /> */}
               </div>
             </div>
           );

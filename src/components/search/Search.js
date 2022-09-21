@@ -49,7 +49,7 @@ export default function Search(props) {
     async (value) => {
       if (isArtist || filter === "People") {
         await axiosInstance
-          .post("/api/search-artist/", { parameter: value, filter: filter })
+          .post("/api/search-artist/", { parameter: value })
           .then((response) => {
             console.log("search artist resp: ", response);
             setResults(response.data);
@@ -62,7 +62,7 @@ export default function Search(props) {
           });
       } else {
         await axiosInstance
-          .post("/api/search/", { parameter: value, filter: filter })
+          .post("/api/search/", { parameter: value })
           .then((response) => {
             console.log("search resp: ", response);
             if (list && list.length > 0) {
